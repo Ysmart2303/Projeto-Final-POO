@@ -16,23 +16,74 @@ class Transacao:
 
     def alterar_valor(self, novo_valor):
         if novo_valor > 0:
-            self.__valor += novo_valor
+            self.__valor = novo_valor
         else:
-            print("Insira o um saldo maior que 0 (zero)")
+            print("Insira um valor maior que 0 (zero)")
 
     def exibir_transacao(self):
         print(f"""Descrição: {self.get_descricao()}
 Valor: R$ {self.get_valor()}
 Tipo: {self.get_tipo()}""")
 
-a = Transacao("Alimentação", 100, "Despesa")
-b= Transacao("Alimentação", 200, "Despesa")
-c = Transacao("Alimentação", 300, "Despesa")
 
-transacoes = [a, b, c]
+class GerenciadorFinanceiro:
 
-for itens in transacoes:
-    a.exibir_transacao()
-    itens.alterar_valor(250)
-    itens.exibir_transacao()
-    print("")
+    def __init__(self):
+        self.transacoes = []
+
+    def adicionar_transacao(self, transacao):
+        self.transacoes.append(transacao)
+
+    def listar_transacoes(self):
+        for transacao in self.transacoes:
+            transacao.exibir_transacao()
+
+    def calcular_receitas(self):
+        total_receitas = 0
+
+        for transacao in self.transacoes:
+            if transacao.get_tipo() == "Receita":
+                total_receitas += transacao.get_valor()
+
+        return total_receitas
+
+    def calcular_despesas(self):
+        total_despesas = 0
+
+        for transacao in self.transacoes:
+            if transacao.get_tipo() == "Despesa":
+                total_despesas += transacao.get_valor()
+
+        return total_despesas
+
+    def calcular_saldo(self):
+        receitas = self.calcular_receitas()
+        despesas = self.calcular_despesas()
+
+        saldo = receitas - despesas
+
+        return saldo
+
+
+# Criando transações
+a = Transacao("Salário", 2000, "Receita")
+b = Transacao("Alimentação", 300, "Despesa")
+c = Transacao("Transporte", 150, "Despesa")
+
+
+# Criando gerenciador
+gerenciador = GerenciadorFinanceiro()
+
+gerenciador.adicionar_transacao(a)
+gerenciador.adicionar_transacao(b)
+gerenciador.adicionar_transacao(c)
+
+
+# Exibindo resultados
+print("=== TRANSAÇÕES ===")
+gerenciador.listar_transacoes()
+
+print("\n=== RESUMO FINANCEIRO ===")
+print(f"Receitas: R$ {gerenciador.calcular_receitas()}")
+print(f"Despesas: R$ {gerenciador.calcular_despesas()}")
+print(f"Saldo: R$ {gerenciador.calcular_saldo()}")

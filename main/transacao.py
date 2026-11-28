@@ -66,9 +66,9 @@ class GerenciadorFinanceiro:
 
 
 # Criando transações
-a = Transacao("Salário", 2000, "Receita")
-b = Transacao("Alimentação", 300, "Despesa")
-c = Transacao("Transporte", 150, "Despesa")
+a = Transacao("Salário", 5000, "Receita")
+b = Transacao("Alimentação", 400, "Despesa")
+c = Transacao("Transporte", 200, "Despesa")
 
 
 # Criando gerenciador

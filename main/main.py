@@ -1,12 +1,51 @@
 import tkinter as tk
 from tkinter import ttk
+import transacao as tsc
+from tkinter import messagebox
 
 aba = tk.Tk()
 aba.title("Gerenciador Financeiro")
-aba.geometry("600x500")
+aba.geometry("500x450")
 aba.minsize(300, 250)
 aba.configure(bg = "#F0F2F5")
 
+# CRIACAO DO GERENCIADOR
+
+gerenciador = tsc.GerenciadorFinanceiro()
+
+def adicionar_transacao():
+
+    # ATRIBUICAO DOS VALORES
+    descricao = entrada_descricao.get()
+    valor = entrada_valor.get()
+    tipo = combo_tipo.get()
+
+    if not descricao or not valor or not tipo:
+        messagebox.showerror("Erro na criação de cadastro", "Preencha todos os campos!")
+        return
+
+    try:
+        valor = float(valor.replace(",", "."))
+    except ValueError:
+        messagebox.showerror("Erro", "Digite um valor numérico válido!")
+        return
+
+    if valor <= 0:
+        messagebox.showerror("Erro", "O valor deve ser maior que zero!")
+        return
+
+
+    # COLOCANDO AS TRANSACOES NA LISTA
+    nova_transacao = tsc.Transacao(descricao, valor, tipo)
+    gerenciador.adicionar_transacao(nova_transacao)
+    atualizar_tela()
+    atualizar_resumo()
+
+
+    # LIMPAR CAMPOS
+    entrada_descricao.delete(0, tk.END)
+    entrada_valor.delete(0, tk.END)
+    combo_tipo.set("")
 
 # ESTILO DA TABELA
 
@@ -106,7 +145,8 @@ botao_adicionar = tk.Button(
     text = "Adicionar",
     bg = "#198754",
     fg = "white",
-    font = ("Arial", 9, "bold")
+    font = ("Arial", 9, "bold"),
+    command = adicionar_transacao
 )
 botao_adicionar.grid(
     row = 0, column = 0, sticky = "ew", padx = 5
@@ -157,6 +197,23 @@ tabela.column("tipo", width = 150, stretch = True)
 
 tabela.pack(fill = "both", expand = True)
 
+# ATUALIZAR TABELA APOS ADD VALORES
+def atualizar_tela():
+
+    tabela.delete(*tabela.get_children())
+
+    for transacao in gerenciador.transacoes:
+
+        descricao = transacao.get_descricao()
+        valor = transacao.get_valor()
+        tipo = transacao.get_tipo()
+
+        tabela.insert(
+            "",
+            "end",
+            values = (descricao, valor, tipo)
+        )
+
 
 # RESUMO FINANCEIRO
 
@@ -195,6 +252,27 @@ lbl_saldo = tk.Label(
 )
 lbl_saldo.pack(pady = 3)
 
+# ATT O RESUMO ABAIXO DA TABELA
+def atualizar_resumo():
+
+    receitas = gerenciador.calcular_receitas()
+    despesas = gerenciador.calcular_despesas()
+    saldo = gerenciador.calcular_saldo()
+
+    lbl_receitas.configure(
+        text = f"Receitas: R$ {receitas:.2f}"
+    )
+
+    lbl_despesas.configure(
+        text = f"Despesas: R$ {despesas:.2f}"
+    )
+
+    lbl_saldo.configure(
+        text = f"Saldo: R$ {saldo:.2f}"
+    )
+
+
+# AJUSTAR TAMANHO DA TELA
 def tamanho_tela(largura):
 
     if largura < 400:

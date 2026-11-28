@@ -63,27 +63,3 @@ class GerenciadorFinanceiro:
         saldo = receitas - despesas
 
         return saldo
-
-
-# Criando transações
-a = Transacao("Salário", 5000, "Receita")
-b = Transacao("Alimentação", 400, "Despesa")
-c = Transacao("Transporte", 200, "Despesa")
-
-
-# Criando gerenciador
-gerenciador = GerenciadorFinanceiro()
-
-gerenciador.adicionar_transacao(a)
-gerenciador.adicionar_transacao(b)
-gerenciador.adicionar_transacao(c)
-
-
-# Exibindo resultados
-print("=== TRANSAÇÕES ===")
-gerenciador.listar_transacoes()
-
-print("\n=== RESUMO FINANCEIRO ===")
-print(f"Receitas: R$ {gerenciador.calcular_receitas()}")
-print(f"Despesas: R$ {gerenciador.calcular_despesas()}")
-print(f"Saldo: R$ {gerenciador.calcular_saldo()}")

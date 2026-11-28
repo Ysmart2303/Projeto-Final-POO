@@ -104,7 +104,6 @@ frame_botoes.columnconfigure(2, weight = 1)
 botao_adicionar = tk.Button(
     frame_botoes,
     text = "Adicionar",
-    width = 18,
     bg = "#198754",
     fg = "white",
     font = ("Arial", 9, "bold")
@@ -116,7 +115,6 @@ botao_adicionar.grid(
 botao_alterar = tk.Button(
     frame_botoes,
     text = "Alterar valor",
-    width = 18,
     bg = "#E0A800",
     fg = "black",
     font = ("Arial", 9, "bold")
@@ -128,7 +126,6 @@ botao_alterar.grid(
 botao_excluir = tk.Button(
     frame_botoes,
     text = "Excluir",
-    width = 18,
     bg = "#DC3545",
     fg = "white",
     font = ("Arial", 9, "bold")
@@ -136,67 +133,6 @@ botao_excluir = tk.Button(
 botao_excluir.grid(
     row = 0, column = 2, sticky = "ew", padx = 5
 )
-
-def responsividade(event):
-
-    if event.widget != aba:
-        return
-
-    if event.width < 400:
-        titulo.configure(font=("Arial", 10, "bold"))
-
-    elif event.width < 500:
-        titulo.configure(font=("Arial", 14, "bold"))
-
-    else:
-        titulo.configure(font=("Arial", 18, "bold"))
-
-    if event.width < 450:
-        # TELA VERTICAL
-
-        botao_adicionar.grid(
-            row = 0, column = 0, sticky = "", pady = 3
-        )
-
-        botao_alterar.grid(
-            row = 1, column = 0, sticky = "", pady = 3
-        )
-
-        botao_excluir.grid(
-            row = 2, column = 0, sticky = "", pady = 3
-        )
-
-        frame_botoes.columnconfigure(
-            0, weight = 1
-        )
-        
-        frame_botoes.columnconfigure(
-            1, weight = 0
-        )
-
-        frame_botoes.columnconfigure(
-            2, weight = 0
-        )
-
-    else:
-        # MODO HORIZONTAL
-
-        for coluna in range(3):
-            frame_botoes.columnconfigure(coluna, weight = 1)
-
-        botao_adicionar.grid(
-            row = 0, column = 0, sticky = "ew", padx = 5
-        )
-
-        botao_alterar.grid(
-            row = 0, column = 1, sticky = "ew", padx = 5
-        )
-
-        botao_excluir.grid(
-            row = 0, column = 2, sticky = "ew", padx = 5
-        )
-
-aba.bind("<Configure>", responsividade)
 
 
 # TABELA
@@ -259,5 +195,145 @@ lbl_saldo = tk.Label(
 )
 lbl_saldo.pack(pady = 3)
 
+def tamanho_tela(largura):
 
+    if largura < 400:
+        return "pequena"
+
+    elif largura < 500:
+        return "media"
+
+    else:
+        return "grande"
+
+def responsividade(event):
+
+    if event.widget != aba:
+        return
+
+    tamanho = tamanho_tela(event.width)
+
+
+    # AJUSTAR TITULO
+
+    if tamanho == "pequena":
+        titulo.configure(font = ("Arial", 10, "bold"))
+
+    elif tamanho == "media":
+        titulo.configure(font = ("Arial", 14, "bold"))
+
+    else:
+        titulo.configure(font = ("Arial", 18, "bold"))
+
+    # AJUSTAR CAMPOS
+
+    if tamanho == "pequena":
+        frame_campos.configure(padx = 8)
+
+    else:
+        frame_campos.configure(padx = 20)
+
+    # AJUSTAR RESUMO
+
+    if tamanho == "pequena":
+        frame_resumo.configure(padx = 10)
+
+    else:
+        frame_resumo.configure(padx = 25)
+
+    # AJUSTAR TABELA
+
+    if tamanho == "pequena":
+        tabela.column("descricao", width = 100)
+        tabela.column("valor", width = 70)
+        tabela.column("tipo", width = 70)
+
+    else:
+        tabela.column("descricao", width = 200)
+        tabela.column("valor", width = 150)
+        tabela.column("tipo", width = 150)
+
+    # AJUSTAR FONTE TABELA
+
+    if tamanho == "pequena":
+        estilo.configure("Treeview", font = ("Arial", 8))
+
+    else:
+        estilo.configure("Treeview", font = ("Arial", 10))
+
+    # AJUSTAR FONTE DOS CABEÇALHOS
+
+    if tamanho == "pequena":
+        estilo.configure(
+            "Treeview.Heading",
+            font = ("Arial", 8, "bold")
+        )
+
+    else:
+        estilo.configure(
+            "Treeview.Heading",
+            font = ("Arial", 10, "bold")
+        )
+
+    # AJUSTAR INFORMACOES ABAIXO DA TABELA
+
+    if tamanho == "pequena":
+        lbl_receitas.configure(font = ("Arial", 8))
+        lbl_despesas.configure(font = ("Arial", 8))
+        lbl_saldo.configure(font = ("Arial", 10, "bold"))
+
+    else:
+        lbl_receitas.configure(font = ("Arial", 10))
+        lbl_despesas.configure(font = ("Arial", 10))
+        lbl_saldo.configure(font = ("Arial", 12, "bold"))
+
+
+
+    if tamanho == "pequena":
+        # TELA VERTICAL
+
+        botao_adicionar.grid(
+            row = 0, column = 0, sticky = "", pady = 3
+        )
+
+        botao_alterar.grid(
+            row = 1, column = 0, sticky = "", pady = 3
+        )
+
+        botao_excluir.grid(
+            row = 2, column = 0, sticky = "", pady = 3
+        )
+
+        frame_botoes.columnconfigure(
+            0, weight = 1
+        )
+        
+        frame_botoes.columnconfigure(
+            1, weight = 0
+        )
+
+        frame_botoes.columnconfigure(
+            2, weight = 0
+        )
+
+    else:
+        # TELA HORIZONTAL
+
+        for coluna in range(3):
+            frame_botoes.columnconfigure(coluna, weight = 1)
+
+        botao_adicionar.grid(
+            row = 0, column = 0, sticky = "ew", padx = 5
+        )
+
+        botao_alterar.grid(
+            row = 0, column = 1, sticky = "ew", padx = 5
+        )
+
+        botao_excluir.grid(
+            row = 0, column = 2, sticky = "ew", padx = 5
+        )   
+
+
+aba.bind("<Configure>", responsividade)
 aba.mainloop()

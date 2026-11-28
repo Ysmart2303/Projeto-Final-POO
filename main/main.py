@@ -1,3 +1,4 @@
+
 import tkinter as tk
 from tkinter import ttk
 import transacao as tsc
@@ -34,13 +35,11 @@ def adicionar_transacao():
         messagebox.showerror("Erro", "O valor deve ser maior que zero!")
         return
 
-
     # COLOCANDO AS TRANSACOES NA LISTA
     nova_transacao = tsc.Transacao(descricao, valor, tipo)
     gerenciador.adicionar_transacao(nova_transacao)
     atualizar_tela()
     atualizar_resumo()
-
 
     # LIMPAR CAMPOS
     entrada_descricao.delete(0, tk.END)
@@ -65,7 +64,6 @@ estilo.configure(
     rowheight = 28
 )
 
-
 # TÍTULO
 
 titulo = tk.Label(
@@ -76,7 +74,6 @@ titulo = tk.Label(
     fg = "#263B5E"
 )
 titulo.pack(pady = 5)
-
 
 # CAMPOS
 
@@ -131,10 +128,9 @@ combo_tipo = ttk.Combobox(
 )
 combo_tipo.pack(fill = "x", pady = 4)
 
-
 # BOTÕES
 
-frame_botoes = tk.Frame(aba, bg  ="#F0F2F5")
+frame_botoes = tk.Frame(aba, bg = "#F0F2F5")
 frame_botoes.pack(fill = "x", padx = 20, pady = 12)
 frame_botoes.columnconfigure(0, weight = 1)
 frame_botoes.columnconfigure(1, weight = 1)
@@ -174,30 +170,57 @@ botao_excluir.grid(
     row = 0, column = 2, sticky = "ew", padx = 5
 )
 
-
 # TABELA
 
 frame_tabela = tk.Frame(aba)
-frame_tabela.pack(fill = "both", expand = True, padx = 20, pady = 10)
+frame_tabela.pack(fill = "x", padx = 20, pady = 10)
 
 tabela = ttk.Treeview(
     frame_tabela,
     columns = ("descricao", "valor", "tipo"),
     show = "headings",
-    height = 8
+    height = 1
 )
+
+# CONFIGURAÇÃO DAS COLUNAS
 
 tabela.heading("descricao", text = "Descrição")
 tabela.heading("valor", text = "Valor")
 tabela.heading("tipo", text = "Tipo")
 
-tabela.column("descricao", width = 200, stretch = True)
-tabela.column("valor", width = 150, stretch = True)
-tabela.column("tipo", width = 150, stretch = True)
+tabela.column("descricao", width = 200)
+tabela.column("valor", width = 150)
+tabela.column("tipo", width = 150)
 
-tabela.pack(fill = "both", expand = True)
+# BARRA DE ROLAGEM
+
+scroll = ttk.Scrollbar(
+    frame_tabela,
+    orient = "vertical",
+    command = tabela.yview
+)
+
+tabela.configure(yscrollcommand = scroll.set)
+
+# POSICIONAMENTO
+
+tabela.pack(side = "left", fill = "x", expand = True)
+scroll.pack(side = "right", fill = "y")
+
+# AJUSTAR ALTURA DA TABELA
+
+def ajustar_altura_tabela():
+
+    quantidade = len(gerenciador.transacoes)
+
+    altura_maxima = 5
+
+    nova_altura = min(max(quantidade, 1), altura_maxima)
+
+    tabela.configure(height = nova_altura)
 
 # ATUALIZAR TABELA APOS ADD VALORES
+
 def atualizar_tela():
 
     tabela.delete(*tabela.get_children())
@@ -214,6 +237,18 @@ def atualizar_tela():
             values = (descricao, valor, tipo)
         )
 
+    ajustar_altura_tabela()
+
+# ROLAGEM DA TABELA PELO MOUSE
+
+def rolar_tabela(event):
+
+    tabela.yview_scroll(
+        int(-1 * (event.delta / 120)),
+        "units"
+    )
+
+tabela.bind("<MouseWheel>", rolar_tabela)
 
 # RESUMO FINANCEIRO
 
@@ -241,7 +276,7 @@ lbl_despesas = tk.Label(
     bg = "white",
     fg = "#DC3545"
 )
-lbl_despesas.pack(pady=3)
+lbl_despesas.pack(pady = 3)
 
 lbl_saldo = tk.Label(
     frame_resumo,
@@ -253,6 +288,7 @@ lbl_saldo = tk.Label(
 lbl_saldo.pack(pady = 3)
 
 # ATT O RESUMO ABAIXO DA TABELA
+
 def atualizar_resumo():
 
     receitas = gerenciador.calcular_receitas()
@@ -271,8 +307,8 @@ def atualizar_resumo():
         text = f"Saldo: R$ {saldo:.2f}"
     )
 
-
 # AJUSTAR TAMANHO DA TELA
+
 def tamanho_tela(largura):
 
     if largura < 400:
@@ -290,7 +326,6 @@ def responsividade(event):
         return
 
     tamanho = tamanho_tela(event.width)
-
 
     # AJUSTAR TITULO
 
@@ -365,8 +400,6 @@ def responsividade(event):
         lbl_despesas.configure(font = ("Arial", 10))
         lbl_saldo.configure(font = ("Arial", 12, "bold"))
 
-
-
     if tamanho == "pequena":
         # TELA VERTICAL
 
@@ -385,7 +418,7 @@ def responsividade(event):
         frame_botoes.columnconfigure(
             0, weight = 1
         )
-        
+
         frame_botoes.columnconfigure(
             1, weight = 0
         )
@@ -410,8 +443,7 @@ def responsividade(event):
 
         botao_excluir.grid(
             row = 0, column = 2, sticky = "ew", padx = 5
-        )   
-
+        )
 
 aba.bind("<Configure>", responsividade)
 aba.mainloop()

@@ -46,6 +46,42 @@ def adicionar_transacao():
     entrada_valor.delete(0, tk.END)
     combo_tipo.set("")
 
+# APAGAR TRANSACAO
+
+def excluir_transacao():
+
+    selecao = tabela.selection()
+
+    if not selecao:
+        messagebox.showwarning(
+            "Aviso",
+            "Selecione uma transação para excluir!"
+        )
+        return
+
+    # RECUPERAR DADOS DA LINHA
+
+    dados = tabela.item(selecao[0])
+    valores = dados["values"]
+
+    # ENCONTRAR E EXCLUIR A TRANSAÇÃO
+
+    for transacao in gerenciador.transacoes:
+
+        if (
+            transacao.get_descricao() == valores[0]
+            and transacao.get_valor() == float(valores[1])
+            and transacao.get_tipo() == valores[2]
+        ):
+
+            gerenciador.excluir_transacao(transacao)
+            break
+
+    # ATUALIZAR INTERFACE
+
+    atualizar_tela()
+    atualizar_resumo()
+
 # ESTILO DA TABELA
 
 estilo = ttk.Style()
@@ -164,7 +200,8 @@ botao_excluir = tk.Button(
     text = "Excluir",
     bg = "#DC3545",
     fg = "white",
-    font = ("Arial", 9, "bold")
+    font = ("Arial", 9, "bold"),
+    command = excluir_transacao
 )
 botao_excluir.grid(
     row = 0, column = 2, sticky = "ew", padx = 5
@@ -219,17 +256,7 @@ def ajustar_altura_tabela():
 
     tabela.configure(height = nova_altura)
 
-# APAGAR TRANSACAO
-def excluir_transacao():
 
-    selecao = tabela.selection()
-
-    if not selecao:
-        messagebox.showwarning(
-            "Aviso",
-            "Selecione uma transação para excluir!"
-        )
-        return
 
 # ATUALIZAR TABELA APOS ADD VALORES
 

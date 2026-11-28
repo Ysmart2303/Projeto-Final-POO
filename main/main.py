@@ -219,6 +219,18 @@ def ajustar_altura_tabela():
 
     tabela.configure(height = nova_altura)
 
+# APAGAR TRANSACAO
+def excluir_transacao():
+
+    selecao = tabela.selection()
+
+    if not selecao:
+        messagebox.showwarning(
+            "Aviso",
+            "Selecione uma transação para excluir!"
+        )
+        return
+
 # ATUALIZAR TABELA APOS ADD VALORES
 
 def atualizar_tela():

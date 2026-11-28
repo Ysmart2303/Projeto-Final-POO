@@ -34,6 +34,14 @@ class GerenciadorFinanceiro:
     def adicionar_transacao(self, transacao):
         self.transacoes.append(transacao)
 
+    def excluir_transacao(self, transacao):
+
+        if transacao in self.transacoes:
+            self.transacoes.remove(transacao)
+            return True
+
+        return False
+
     def listar_transacoes(self):
         for transacao in self.transacoes:
             transacao.exibir_transacao()

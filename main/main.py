@@ -1,8 +1,8 @@
-
 import tkinter as tk
 from tkinter import ttk
-import transacao as tsc
 from tkinter import messagebox
+from tkinter import simpledialog
+import transacao as tsc
 
 aba = tk.Tk()
 aba.title("Gerenciador Financeiro")
@@ -45,6 +45,54 @@ def adicionar_transacao():
     entrada_descricao.delete(0, tk.END)
     entrada_valor.delete(0, tk.END)
     combo_tipo.set("")
+
+# ALTERAR TRANSACAO
+
+def alterar_valor():
+
+    selecao = tabela.selection()
+
+    if not selecao:
+        messagebox.showwarning(
+            "Aviso",
+            "Selecione uma transação para alterar!"
+        )
+        return
+
+    dados = tabela.item(selecao[0])
+    valores = dados["values"]
+
+    for transacao in gerenciador.transacoes:
+
+        # RECUPERA OS DADOS 
+        if (
+            transacao.get_descricao() == valores[0]
+            and transacao.get_valor() == float(valores[1])
+            and transacao.get_tipo() == valores[2]
+        ):
+
+            # CANTO PARA ALTERAR O VALOR
+            novo_valor = simpledialog.askfloat(
+                "Alterar valor",
+                "Digite o novo valor:"
+            )
+
+            if novo_valor is None:
+                return
+
+            if novo_valor <= 0:
+                messagebox.showerror(
+                    "Erro",
+                    "O valor deve ser maior que zero!"
+                )
+                return
+
+            transacao.alterar_valor(novo_valor)
+            break
+
+    atualizar_tela()
+    atualizar_resumo()
+
 
 # APAGAR TRANSACAO
 
@@ -189,7 +237,8 @@ botao_alterar = tk.Button(
     text = "Alterar valor",
     bg = "#E0A800",
     fg = "black",
-    font = ("Arial", 9, "bold")
+    font = ("Arial", 9, "bold"),
+    command = alterar_valor
 )
 botao_alterar.grid(
     row = 0, column = 1, sticky = "ew", padx = 5

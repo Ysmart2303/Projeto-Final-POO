@@ -29,13 +29,14 @@ estilo.configure(
 
 # TÍTULO
 
-tk.Label(
+titulo = tk.Label(
     aba,
     text = "GERENCIADOR FINANCEIRO",
     font = ("Arial", 18, "bold"),
     bg = "#F0F2F5",
     fg = "#263B5E"
-).pack(pady = 5)
+)
+titulo.pack(pady = 5)
 
 
 # CAMPOS
@@ -103,6 +104,7 @@ frame_botoes.columnconfigure(2, weight = 1)
 botao_adicionar = tk.Button(
     frame_botoes,
     text = "Adicionar",
+    width = 18,
     bg = "#198754",
     fg = "white",
     font = ("Arial", 9, "bold")
@@ -114,6 +116,7 @@ botao_adicionar.grid(
 botao_alterar = tk.Button(
     frame_botoes,
     text = "Alterar valor",
+    width = 18,
     bg = "#E0A800",
     fg = "black",
     font = ("Arial", 9, "bold")
@@ -125,6 +128,7 @@ botao_alterar.grid(
 botao_excluir = tk.Button(
     frame_botoes,
     text = "Excluir",
+    width = 18,
     bg = "#DC3545",
     fg = "white",
     font = ("Arial", 9, "bold")
@@ -138,23 +142,47 @@ def responsividade(event):
     if event.widget != aba:
         return
 
+    if event.width < 400:
+        titulo.configure(font=("Arial", 10, "bold"))
+
+    elif event.width < 500:
+        titulo.configure(font=("Arial", 14, "bold"))
+
+    else:
+        titulo.configure(font=("Arial", 18, "bold"))
+
     if event.width < 450:
         # TELA VERTICAL
 
         botao_adicionar.grid(
-            row = 0, column = 0, sticky = "ew", pady = 3
+            row = 0, column = 0, sticky = "", pady = 3
         )
 
         botao_alterar.grid(
-            row = 1, column = 0, sticky = "ew", pady = 3
+            row = 1, column = 0, sticky = "", pady = 3
         )
 
         botao_excluir.grid(
-            row = 2, column = 0, sticky = "ew", pady = 3
+            row = 2, column = 0, sticky = "", pady = 3
+        )
+
+        frame_botoes.columnconfigure(
+            0, weight = 1
+        )
+        
+        frame_botoes.columnconfigure(
+            1, weight = 0
+        )
+
+        frame_botoes.columnconfigure(
+            2, weight = 0
         )
 
     else:
         # MODO HORIZONTAL
+
+        for coluna in range(3):
+            frame_botoes.columnconfigure(coluna, weight = 1)
 
         botao_adicionar.grid(
             row = 0, column = 0, sticky = "ew", padx = 5

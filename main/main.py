@@ -338,42 +338,135 @@ def rolar_tabela(event):
 
 tabela.bind("<MouseWheel>", rolar_tabela)
 
+
 # RESUMO FINANCEIRO
 
-frame_resumo = tk.Frame(
+# FRAME PARA OS CARDS
+frame_cards = tk.Frame(
     aba,
-    bg = "white",
-    padx = 25,
+    bg = "#F0F2F5"
+)
+
+frame_cards.pack(
+    fill = "x",
+    padx = 20,
     pady = 10
 )
-frame_resumo.pack(fill = "x", padx = 20, pady = 12)
+
+frame_cards.columnconfigure(0, weight = 1)
+frame_cards.columnconfigure(1, weight = 1)
+frame_cards.columnconfigure(2, weight = 1)
+
+
+# CARD DE RECEITAS
+card_receitas = tk.Frame(
+    frame_cards,
+    bg = "white",
+    padx = 15,
+    pady = 15
+)
+
+card_receitas.grid(
+    row = 0,
+    column = 0,
+    padx = 5,
+    sticky = "ew"
+)
+
+
+# CARD DE DESPESAS
+card_despesas = tk.Frame(
+    frame_cards,
+    bg = "white",
+    padx = 15,
+    pady = 15
+)
+
+card_despesas.grid(
+    row = 0,
+    column = 1,
+    padx = 5,
+    sticky = "ew"
+)
+
+
+# CARD DE SALDO
+card_saldo = tk.Frame(
+    frame_cards,
+    bg = "white",
+    padx = 15,
+    pady = 15
+)
+
+card_saldo.grid(
+    row = 0,
+    column = 2,
+    padx = 5,
+    sticky = "ew"
+)
+
+
+# LABEL DE RECEITAS
+
+tk.Label(
+    card_receitas,
+    text = "RECEITAS",
+    font = ("Arial", 10, "bold"),
+    bg = "white",
+    fg = "#263B5E"
+).pack()
 
 lbl_receitas = tk.Label(
-    frame_resumo,
-    text = "Receitas: R$ 0.00",
-    font = ("Arial", 10),
+    card_receitas,
+    text = "R$ 0,00",
+    font = ("Arial", 15, "bold"),
     bg = "white",
     fg = "#198754"
 )
-lbl_receitas.pack(pady = 3)
+
+lbl_receitas.pack(pady = 5)
+
+
+# LABEL DE DESPESAS
+
+tk.Label(
+    card_despesas,
+    text = "DESPESAS",
+    font = ("Arial", 10, "bold"),
+    bg = "white",
+    fg = "#263B5E"
+).pack()
 
 lbl_despesas = tk.Label(
-    frame_resumo,
-    text = "Despesas: R$ 0.00",
-    font = ("Arial", 10),
+    card_despesas,
+    text = "R$ 0,00",
+    font = ("Arial", 15, "bold"),
     bg = "white",
     fg = "#DC3545"
 )
-lbl_despesas.pack(pady = 3)
+
+lbl_despesas.pack(pady = 5)
+
+
+# LABEL DE SALDO
+
+tk.Label(
+    card_saldo,
+    text = "SALDO",
+    font = ("Arial", 10, "bold"),
+    bg = "white",
+    fg = "#263B5E"
+).pack()
 
 lbl_saldo = tk.Label(
-    frame_resumo,
-    text = "Saldo: R$ 0.00",
-    font = ("Arial", 12, "bold"),
+    card_saldo,
+    text = "R$ 0,00",
+    font = ("Arial", 15, "bold"),
     bg = "white",
     fg = "#263B5E"
 )
-lbl_saldo.pack(pady = 3)
+
+lbl_saldo.pack(pady = 5)
 
 # ATT O RESUMO ABAIXO DA TABELA
 
@@ -384,15 +477,15 @@ def atualizar_resumo():
     saldo = gerenciador.calcular_saldo()
 
     lbl_receitas.configure(
-        text = f"Receitas: R$ {receitas:.2f}"
+        text = f"R$ {receitas:.2f}"
     )
 
     lbl_despesas.configure(
-        text = f"Despesas: R$ {despesas:.2f}"
+        text = f"R$ {despesas:.2f}"
     )
 
     lbl_saldo.configure(
-        text = f"Saldo: R$ {saldo:.2f}"
+        text = f"R$ {saldo:.2f}"
     )
 
 # AJUSTAR TAMANHO DA TELA
@@ -437,10 +530,10 @@ def responsividade(event):
     # AJUSTAR RESUMO
 
     if tamanho == "pequena":
-        frame_resumo.configure(padx = 10)
+        frame_cards.configure(padx = 10)
 
     else:
-        frame_resumo.configure(padx = 25)
+        frame_cards.configure(padx = 25)
 
     # AJUSTAR TABELA
 
